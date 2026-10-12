@@ -1,20 +1,28 @@
-/* --- Globale variabler og tema --- */
+/* --- Globale variabler (Enkelt å tilpasse) --- */
 :root {
-	--font-sans: "Open Sans", sans-serif;
+	--font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 	
-	/* Fargepalett */
-	--bg-main: #383232;
-	--bg-card: #ffffff;
-	--bg-label: #fafafa;
-	--bg-checked: #cfc8c8;
+	/* Fargepalett (Moderne Mørkt Tema) */
+	--bg-main: #121214;
+	--bg-sidebar: #1a1a1e;
+	--bg-card: #202024;
+	--bg-card-hover: #26262b;
+	--bg-tag: #29292e;
+	--bg-checked: #323238;
 	
-	--text-light: #fafafa;
-	--text-dark: #222222;
-	--shadow-color: rgba(40, 40, 40, 0.4);
+	--text-main: #e1e1e6;
+	--text-muted: #a8a8b3;
+	--text-dark: #121214;
+	--accent: #4ade80; /* Frisk grønn aksentfarge for interaksjon */
+	--accent-hover: #22c55e;
 	
-	/* Layout & spacing */
+	/* Layout, hjørner & skygger */
+	--radius-lg: 12px;
+	--radius-md: 8px;
 	--radius-sm: 4px;
-	--gap-main: 20px;
+	--shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.2);
+	--shadow-md: 0 4px 12px rgba(0, 0, 0, 0.3);
+	--transition-fast: 0.2s ease;
 }
 
 /* --- Base-stiler --- */
@@ -22,31 +30,46 @@ html,
 body {
 	font-family: var(--font-sans);
 	background-color: var(--bg-main);
-	color: var(--text-light);
+	color: var(--text-main);
 	margin: 0;
 	padding: 0;
-	font-size: 13px;
-	line-height: 1.5;
+	font-size: 14px;
+	line-height: 1.6;
+	-webkit-font-smoothing: antialiased;
 }
 
-/* --- Layout (Grid & Flexbox) --- */
+/* --- Hoved-layout (Helt responsivt) --- */
 .grid-container {
 	display: grid;
-	grid-template-columns: 300px 1fr;
-	gap: var(--gap-main);
-	margin: 25px var(--gap-main);
+	grid-template-columns: 1fr; /* Standard: Én kolonne på mobil */
+	gap: 32px;
+	max-width: 1400px;
+	margin: 0 auto;
+	padding: 24px;
+	
+	/* Skifter til to kolonner på nettbrett/PC */
+	@media (min-width: 768px) {
+		grid-template-columns: 280px 1fr;
+	}
 }
 
-.grid-container a {
-	color: var(--text-dark);
-}
-
+/* Sidepanel for kontroller */
 #controls {
-	grid-column: 1;
+	background-color: var(--bg-sidebar);
+	padding: 24px;
+	border-radius: var(--radius-lg);
+	height: fit-content;
+	box-shadow: var(--shadow-sm);
+	position: sticky; /* Låser panelet når man scroller på PC */
+	top: 24px;
 }
 
+/* Selve bilde/kort-området */
 #container {
-	grid-column: 2;
+	display: grid;
+	/* Lager så mange kolonner på minst 240px som det er plass til automatisk */
+	grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+	gap: 20px;
 }
 
 .boxContainer {
@@ -55,111 +78,128 @@ body {
 
 /* --- Typografi --- */
 h1 {
-	text-transform: uppercase;
-	font-size: 38px;
-	text-shadow: rgba(136, 136, 136, 0.3) 0 0 3px;
-	margin: 0 0 10px 0;
+	font-size: 2rem;
+	font-weight: 800;
+	letter-spacing: -0.025em;
+	margin: 0 0 16px 0;
+	color: #fff;
 }
 
 h2 {
-	font-size: 18px;
-	font-weight: 700;
-	margin-bottom: 2px;
+	font-size: 1.25rem;
+	font-weight: 600;
+	margin-bottom: 4px;
 }
 
 h3 {
-	font-size: 16px;
-	line-height: 1.2;
-	margin: 22px 0 7px 0;
-	text-align: left;
+	font-size: 0.9rem;
+	text-transform: uppercase;
+	letter-spacing: 0.05em;
+	color: var(--text-muted);
+	margin: 24px 0 12px 0;
 }
 
-/* --- Kort / Grid-elementer --- */
+/* --- Moderne Kort (.grid-item) --- */
 .grid-item {
-	width: 225px;
 	background-color: var(--bg-card);
-	color: var(--text-dark);
-	box-shadow: 0 0 7px var(--shadow-color);
-	margin: 8px 0;
-	padding: 8px;
-	font-weight: 300;
+	border-radius: var(--radius-lg);
+	padding: 16px;
+	box-shadow: var(--shadow-sm);
+	transition: transform var(--transition-fast), box-shadow var(--transition-fast), background-color var(--transition-fast);
+	display: flex;
+	flex-direction: column;
+	height: 100%; /* Sørger for at alle kort blir like høye i en rad */
+	box-sizing: border-box;
+	
+	&:hover {
+		transform: translateY(-4px);
+		box-shadow: var(--shadow-md);
+		background-color: var(--bg-card-hover);
+	}
 	
 	& h2 {
-		font-size: 14px;
+		font-size: 1.1rem;
 		font-weight: 600;
-		text-shadow: none;
-		margin: 8px 0;
+		margin: 12px 0 8px 0;
+		color: #fff;
 	}
 	
 	& img {
-		max-width: 100%;
-		height: auto;
-		display: block;
+		width: 100%;
+		height: 200px;
+		object-fit: cover; /* Sørger for at alle bilder fyller ruten pent uten å strekkes */
+		border-radius: var(--radius-md);
+		background-color: var(--bg-main);
 	}
 }
 
-/* --- Spesifikke elementer --- */
-span #count,
-#count {
-	font-weight: bold;
+/* --- Interaktive elementer --- */
+#controls a {
+	color: var(--text-muted);
+	text-decoration: none;
+	transition: color var(--transition-fast);
+	
+	&:hover {
+		color: var(--accent);
+	}
 }
 
 #showall {
-	border-bottom: 1px solid var(--text-light);
+	display: inline-block;
+	color: var(--accent) !important;
+	font-weight: 600;
 	cursor: pointer;
-	transition: border-bottom-width 0.1s ease;
+	margin-bottom: 16px;
 	
 	&:hover {
-		border-bottom-width: 2px;
+		text-decoration: underline;
 	}
 }
 
 .tag {
 	display: inline-block;
-	padding: 2px 6px;
-	font-weight: 400;
-	margin: 3px;
-	color: var(--text-dark);
-	border: 1px solid rgba(0, 0, 0, 0.15);
-	border-bottom: 2px solid rgba(0, 0, 0, 0.2);
-	border-right: 2px solid rgba(0, 0, 0, 0.2);
+	padding: 4px 8px;
+	font-size: 0.75rem;
+	font-weight: 500;
+	margin: 2px;
+	background-color: var(--bg-tag);
+	color: var(--text-muted);
 	border-radius: var(--radius-sm);
+	border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-/* --- Kontroller & Lenker --- */
-#controls a {
-	color: var(--text-light);
-	text-decoration: underline;
-	text-underline-position: under;
-	
-	&:hover {
-		text-decoration-thickness: 2px;
-	}
-}
-
-/* --- Filter & Avkrysningsbokser --- */
+/* --- Responsive Filter-knapper --- */
 #filters {
-	text-align: center;
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+	
+	& .checkbox-container {
+		width: 100%;
+	}
 	
 	& label {
-		display: block;
-		line-height: 52px;
-		background-color: var(--bg-label);
-		color: black;
-		text-align: center;
-		padding: 3px 4px;
-		margin: 2px;
-		box-shadow: 0 0 5px var(--shadow-color);
+		display: flex;
+		align-items: center;
+		justify-content: flex-start;
+		padding: 12px 16px;
+		background-color: rgba(255, 255, 255, 0.03);
+		border: 1px solid rgba(255, 255, 255, 0.05);
+		border-radius: var(--radius-md);
+		color: var(--text-main);
 		cursor: pointer;
+		transition: all var(--transition-fast);
+		font-weight: 500;
+		box-sizing: border-box;
+		width: 100% !important; /* Overskriver gamle .select_width-klasser */
+		
+		&:hover {
+			background-color: rgba(255, 255, 255, 0.08);
+			border-color: rgba(255, 255, 255, 0.1);
+		}
 	}
 	
-	& label span {
-		display: inline-block;
-		vertical-align: middle;
-		line-height: normal;
-	}
-	
-	/* Skjul checkboxen visuelt, men behold tilgjengelighet */
+	/* Skjul den gamle checkboxen helt sikkert */
 	& input[type="checkbox"] {
 		position: absolute;
 		width: 1px;
@@ -171,45 +211,42 @@ span #count,
 		border: 0;
 	}
 	
-	/* Moderne styling basert på om boksen er sjekket */
+	/* Aktiv / Valgt filter-tilstand */
 	& .checkbox-container:has(input[type="checkbox"]:checked) label {
 		background-color: var(--bg-checked);
+		border-color: var(--accent);
+		color: #fff;
 		
-		& span {
-			text-decoration: underline;
-			text-underline-position: under;
+		/* Lager en liten farget prikk eller indikator foran teksten */
+		&::before {
+			content: '';
+			display: inline-block;
+			width: 6px;
+			height: 6px;
+			background-color: var(--accent);
+			border-radius: 50%;
+			margin-right: 8px;
 		}
 	}
 }
 
-div.checkbox-container {
-	display: inline-block;
-	margin: 0;
-	padding: 0;
-}
-
+/* Sirkel-fargeindikator (hvis du bruker fargekoder i filteret) */
 #filters .legend_circle {
 	display: inline-block;
-	width: 14px;
-	height: 14px;
+	width: 10px;
+	height: 10px;
 	border-radius: 50%;
-	margin: 0 6px 0 3px;
-	vertical-align: middle;
+	margin-right: 8px;
 }
 
-/* --- Bredder på merkelapper --- */
-.select_width2 label { width: 138px; }
-.select_width3 label { width: 88px; }
-
-/* --- Utskrift --- */
+/* --- Utskriftsoptimalisering --- */
 @media print {
-	.grid-item {
-		background-color: var(--bg-card);
-		box-shadow: none;
-		border: 1px solid black;
-	}
-
-	a {
-		display: none;
+	body { background: white; color: black; }
+	.grid-container { grid-template-columns: 1fr; }
+	#controls { display: none; }
+	.grid-item { 
+		border: 1px solid #ddd; 
+		box-shadow: none; 
+		page-break-inside: avoid;
 	}
 }
