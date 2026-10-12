@@ -1,55 +1,63 @@
+/* --- Globale variabler og tema --- */
+:root {
+	--font-sans: "Open Sans", sans-serif;
+	
+	/* Fargepalett */
+	--bg-main: #383232;
+	--bg-card: #ffffff;
+	--bg-label: #fafafa;
+	--bg-checked: #cfc8c8;
+	
+	--text-light: #fafafa;
+	--text-dark: #222222;
+	--shadow-color: rgba(40, 40, 40, 0.4);
+	
+	/* Layout & spacing */
+	--radius-sm: 4px;
+	--gap-main: 20px;
+}
+
+/* --- Base-stiler --- */
 html,
 body {
-	font-family: "Open Sans", sans-serif;
-	background-color: #383232;
-	color: #fafafa;
+	font-family: var(--font-sans);
+	background-color: var(--bg-main);
+	color: var(--text-light);
 	margin: 0;
 	padding: 0;
 	font-size: 13px;
+	line-height: 1.5;
 }
 
+/* --- Layout (Grid & Flexbox) --- */
 .grid-container {
 	display: grid;
 	grid-template-columns: 300px 1fr;
-	grid-template-rows: 1fr;
-	align-content: stretch;
-	justify-content: stretch;
-	margin: 25px 20px;
+	gap: var(--gap-main);
+	margin: 25px var(--gap-main);
 }
 
 .grid-container a {
-	color: #222;
+	color: var(--text-dark);
 }
 
 #controls {
-	grid-row: 1;
 	grid-column: 1;
 }
 
 #container {
-	grid-row: 1;
 	grid-column: 2;
-	margin-left: 20px;
 }
 
-span #count {
-	font-weight: bold;
+.boxContainer {
+	width: 100%;
 }
 
-.grid-item {
-	width: 225px;
-	background-color: #fff;
-	color: #222;
-	box-shadow: #282828 0 0 7px;
-	margin: 8px 0;
-	padding: 8px;
-	font-weight: 300;
-}
-
+/* --- Typografi --- */
 h1 {
 	text-transform: uppercase;
 	font-size: 38px;
-	text-shadow: #888 0px 0px 3px;
+	text-shadow: rgba(136, 136, 136, 0.3) 0 0 3px;
 	margin: 0 0 10px 0;
 }
 
@@ -60,119 +68,143 @@ h2 {
 }
 
 h3 {
-	line-height: 16px;
 	font-size: 16px;
-	margin-top: 22px;
-	margin-bottom: 7px;
+	line-height: 1.2;
+	margin: 22px 0 7px 0;
 	text-align: left;
 }
 
-#controls a {
-	color: #fafafa;
-	text-decoration: underline;
-	text-underline-position: under;
+/* --- Kort / Grid-elementer --- */
+.grid-item {
+	width: 225px;
+	background-color: var(--bg-card);
+	color: var(--text-dark);
+	box-shadow: 0 0 7px var(--shadow-color);
+	margin: 8px 0;
+	padding: 8px;
+	font-weight: 300;
+	
+	& h2 {
+		font-size: 14px;
+		font-weight: 600;
+		text-shadow: none;
+		margin: 8px 0;
+	}
+	
+	& img {
+		max-width: 100%;
+		height: auto;
+		display: block;
+	}
 }
 
-#controls a:hover {
-	text-decoration-thickness: 2px;
-}
-
+/* --- Spesifikke elementer --- */
+span #count,
 #count {
 	font-weight: bold;
 }
 
 #showall {
-	border-bottom: 1px solid #fafafa;
+	border-bottom: 1px solid var(--text-light);
 	cursor: pointer;
-}
-#showall:hover {
-	border-bottom: 2px solid #fafafa;
-}
-
-.boxContainer {
-	width: 100%;
-}
-
-.grid-item h2 {
-	font-size: 14px;
-	font-weight: 600;
-	text-shadow: none;
-	margin: 8px 0;
-}
-
-.grid-item img {
-	max-width: 100%;
+	transition: border-bottom-width 0.1s ease;
+	
+	&:hover {
+		border-bottom-width: 2px;
+	}
 }
 
 .tag {
 	display: inline-block;
-	padding: 0px 4px;
+	padding: 2px 6px;
 	font-weight: 400;
-	margin: 3px 3px;
-	color: #222;
-	border: 2px solid rgba(0, 0, 0, 0.2);
-	border-radius: 0 2px 0 2px;
-	border-top: none;
-	border-left: none;
+	margin: 3px;
+	color: var(--text-dark);
+	border: 1px solid rgba(0, 0, 0, 0.15);
+	border-bottom: 2px solid rgba(0, 0, 0, 0.2);
+	border-right: 2px solid rgba(0, 0, 0, 0.2);
+	border-radius: var(--radius-sm);
 }
 
-#filters {
-	text-align: center;
-}
-
-#filters input[type="checkbox"]:checked + label {
-	background-color: #cfc8c8;
-}
-
-#filters input[type="checkbox"]:checked + label span {
+/* --- Kontroller & Lenker --- */
+#controls a {
+	color: var(--text-light);
 	text-decoration: underline;
 	text-underline-position: under;
+	
+	&:hover {
+		text-decoration-thickness: 2px;
+	}
 }
 
-/*Checkboxes*/
+/* --- Filter & Avkrysningsbokser --- */
+#filters {
+	text-align: center;
+	
+	& label {
+		display: block;
+		line-height: 52px;
+		background-color: var(--bg-label);
+		color: black;
+		text-align: center;
+		padding: 3px 4px;
+		margin: 2px;
+		box-shadow: 0 0 5px var(--shadow-color);
+		cursor: pointer;
+	}
+	
+	& label span {
+		display: inline-block;
+		vertical-align: middle;
+		line-height: normal;
+	}
+	
+	/* Skjul checkboxen visuelt, men behold tilgjengelighet */
+	& input[type="checkbox"] {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		padding: 0;
+		margin: -1px;
+		overflow: hidden;
+		clip: rect(0, 0, 0, 0);
+		border: 0;
+	}
+	
+	/* Moderne styling basert på om boksen er sjekket */
+	& .checkbox-container:has(input[type="checkbox"]:checked) label {
+		background-color: var(--bg-checked);
+		
+		& span {
+			text-decoration: underline;
+			text-underline-position: under;
+		}
+	}
+}
+
 div.checkbox-container {
 	display: inline-block;
 	margin: 0;
 	padding: 0;
 }
 
-#filters label {
-	display: block;
-	line-height: 52px;
-	background-color: #fafafa;
-	color: black;
-	text-align: center;
-	padding: 3px 4px;
-	margin: 2px;
-	box-shadow: #282828 0 0 5px;
-}
-
-#filters label span {
-	display: inline-block;
-	vertical-align: middle;
-	line-height: normal; /* Reset line-height for the child. */
-	background: none;
-}
-
-#filters input[type="checkbox"] {
-	position: absolute;
-	opacity: 0;
-	cursor: pointer;
-	height: 0;
-	width: 0;
-}
-
 #filters .legend_circle {
-	content: "";
 	display: inline-block;
-	padding: 7px;
-	border-radius: 7px;
+	width: 14px;
+	height: 14px;
+	border-radius: 50%;
 	margin: 0 6px 0 3px;
+	vertical-align: middle;
 }
 
+/* --- Bredder på merkelapper --- */
+.select_width2 label { width: 138px; }
+.select_width3 label { width: 88px; }
+
+/* --- Utskrift --- */
 @media print {
 	.grid-item {
-		background-color: #fff;
+		background-color: var(--bg-card);
 		box-shadow: none;
 		border: 1px solid black;
 	}
@@ -180,12 +212,4 @@ div.checkbox-container {
 	a {
 		display: none;
 	}
-}
-
-.select_width2 label {
-	width: 138px;
-}
-
-.select_width3 label {
-	width: 88px;
 }
